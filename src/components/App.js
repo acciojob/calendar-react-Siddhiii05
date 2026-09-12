@@ -106,31 +106,14 @@ const App = () => {
         </span>
       )}
 
-      {/* Navigation buttons */}
-      <div>
-        <button id="prev-year" onClick={handlePreviousYear}>
-          Previous Year
-        </button>
-
-        <button id="prev-month" onClick={handlePreviousMonth}>
-          Previous Month
-        </button>
-
-        <button id="next-month" onClick={handleNextMonth}>
-          Next Month
-        </button>
-
-        <button id="next-year" onClick={handleNextYear}>
-          Next Year
-        </button>
-      </div>
+      <hr/>
 
       {/* Calendar table */}
       <table>
         <thead>
           <tr>
             {weekDays.map((day) => (
-              <th key={day}>{day}</th>
+              <td key={day}>{day}</td>
             ))}
           </tr>
         </thead>
@@ -157,6 +140,25 @@ const App = () => {
     )}
   </tbody>
       </table>
+ <hr/>
+      {/* Navigation buttons */}
+      <div>
+        <button id="prev-year" onClick={handlePreviousYear}>
+          Previous Year
+        </button>
+
+        <button id="prev-month" onClick={handlePreviousMonth}>
+          Previous Month
+        </button>
+
+        <button id="next-month" onClick={handleNextMonth}>
+          Next Month
+        </button>
+
+        <button id="next-year" onClick={handleNextYear}>
+          Next Year
+        </button>
+      </div>
     </div>
   );
 };
