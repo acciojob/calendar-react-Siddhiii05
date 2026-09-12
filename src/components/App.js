@@ -92,14 +92,14 @@ const App = () => {
       {/* Editable year */}
       {isEditingYear ? (
         <input
-          id="year-input"
-          type="number"
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
-          onBlur={() => setIsEditingYear(false)}
-          onKeyDown={handleYearKeyDown}
-          autoFocus
-        />
+  id="year-text-box"
+  type="number"
+  value={year}
+  onChange={(e) => setYear(e.target.value)}
+  onBlur={() => setIsEditingYear(false)}
+  onKeyDown={handleYearKeyDown}
+  autoFocus
+/>
       ) : (
         <span id="year" onDoubleClick={() => setIsEditingYear(true)}>
           {year}
@@ -136,27 +136,26 @@ const App = () => {
         </thead>
 
         <tbody>
-          {Array.from(
-            {
-              length: Math.ceil((firstDay + daysInMonth) / 7),
-            },
-            (_, weekIndex) => (
-              <tr key={weekIndex}>
-                {Array.from({ length: 7 }, (_, dayIndex) => {
-                  const dayNumber = weekIndex * 7 + dayIndex - firstDay + 1;
+    {Array.from(
+      { length: Math.ceil((firstDay + daysInMonth) / 7) },
+      (_, weekIndex) => (
+        <tr key={weekIndex}>
+          {Array.from({ length: 7 }, (_, dayIndex) => {
+            const dayNumber =
+              weekIndex * 7 + dayIndex - firstDay + 1;
 
-                  return (
-                    <td key={dayIndex}>
-                      {dayNumber > 0 && dayNumber <= daysInMonth
-                        ? dayNumber
-                        : ""}
-                    </td>
-                  );
-                })}
-              </tr>
-            ),
-          )}
-        </tbody>
+            return (
+              <td key={dayIndex}>
+                {dayNumber > 0 && dayNumber <= daysInMonth
+                  ? dayNumber
+                  : ""}
+              </td>
+            );
+          })}
+        </tr>
+      )
+    )}
+  </tbody>
       </table>
     </div>
   );
