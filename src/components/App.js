@@ -1,163 +1,163 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import "../styles/App.css";
 
 const App = () => {
-  const [month, setMonth] = useState("8");
+  const [month, setMonth] = useState("September");
   const [year, setYear] = useState("2026");
   const [isEditingYear, setIsEditingYear] = useState(false);
 
   const months = [
-    {
-      id: 0,
-      name: "January",
-    },
-    {
-      id: 1,
-      name: "February",
-    },
-    {
-      id: 2,
-      name: "March",
-    },
-    {
-      id: 3,
-      name: "April",
-    },
-    {
-      id: 4,
-      name: "May",
-    },
-    {
-      id: 5,
-      name: "June",
-    },
-    {
-      id: 6,
-      name: "July",
-    },
-    {
-      id: 7,
-      name: "August",
-    },
-    {
-      id: 8,
-      name: "September",
-    },
-    {
-      id: 9,
-      name: "October",
-    },
-    {
-      id: 10,
-      name: "November",
-    },
-    {
-      id: 11,
-      name: "December",
-    },
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  // Get the numeric index of the selected month
+  const monthIndex = months.indexOf(month);
 
+  // Find the weekday on which the month starts
+  const firstDay = new Date(Number(year), monthIndex, 1).getDay();
+
+  // Find the total number of days in the selected month
+  const daysInMonth = new Date(Number(year), monthIndex + 1, 0).getDate();
+
+  // Create an array of dates
   const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
+
+  // Previous month
+  const handlePreviousMonth = () => {
+    if (monthIndex === 0) {
+      setMonth("December");
+      setYear(String(Number(year) - 1));
+    } else {
+      setMonth(months[monthIndex - 1]);
+    }
+  };
+
+  // Next month
+  const handleNextMonth = () => {
+    if (monthIndex === 11) {
+      setMonth("January");
+      setYear(String(Number(year) + 1));
+    } else {
+      setMonth(months[monthIndex + 1]);
+    }
+  };
+
+  // Previous year
+  const handlePreviousYear = () => {
+    setYear(String(Number(year) - 1));
+  };
+
+  // Next year
+  const handleNextYear = () => {
+    setYear(String(Number(year) + 1));
+  };
+
+  // Finish editing year when Enter is pressed
+  const handleYearKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setIsEditingYear(false);
+    }
+  };
 
   return (
     <div id="main">
-      <h1>Calendar</h1>
+      <h1 id="heading">Calendar</h1>
 
+      {/* Month dropdown */}
       <select
+        id="month"
         value={month}
-        onChange={(e) => {
-          setMonth(e.target.value);
-        }}
+        onChange={(e) => setMonth(e.target.value)}
       >
-        {months.map((month) => {
-          return (
-            <option key={month.id} value={month.id}>
-              {month.name}
-            </option>
-          );
-        })}
+        {months.map((monthName) => (
+          <option key={monthName} value={monthName}>
+            {monthName}
+          </option>
+        ))}
       </select>
 
+      {/* Editable year */}
       {isEditingYear ? (
         <input
+          id="year-input"
           type="number"
           value={year}
           onChange={(e) => setYear(e.target.value)}
           onBlur={() => setIsEditingYear(false)}
+          onKeyDown={handleYearKeyDown}
+          autoFocus
         />
       ) : (
-        <h2 onDoubleClick={() => setIsEditingYear(true)}>{year}</h2>
+        <span id="year" onDoubleClick={() => setIsEditingYear(true)}>
+          {year}
+        </span>
       )}
 
+      {/* Navigation buttons */}
+      <div>
+        <button id="prev-year" onClick={handlePreviousYear}>
+          Previous Year
+        </button>
+
+        <button id="prev-month" onClick={handlePreviousMonth}>
+          Previous Month
+        </button>
+
+        <button id="next-month" onClick={handleNextMonth}>
+          Next Month
+        </button>
+
+        <button id="next-year" onClick={handleNextYear}>
+          Next Year
+        </button>
+      </div>
+
+      {/* Calendar table */}
       <table>
         <thead>
           <tr>
-            {weekDays.map((day) => {
-              return <th key={day}>{day}</th>;
-            })}
+            {weekDays.map((day) => (
+              <th key={day}>{day}</th>
+            ))}
           </tr>
         </thead>
 
         <tbody>
           {Array.from(
-            { length: Math.ceil((firstDay + daysInMonth) / 7) },
-            (_, weekIndex) => {
-              return (
-                <tr key={weekIndex}>
-                  {Array.from({ length: 7 }, (_, dayIndex) => {
-                    const dayNumber = weekIndex * 7 + dayIndex - firstDay + 1;
+            {
+              length: Math.ceil((firstDay + daysInMonth) / 7),
+            },
+            (_, weekIndex) => (
+              <tr key={weekIndex}>
+                {Array.from({ length: 7 }, (_, dayIndex) => {
+                  const dayNumber = weekIndex * 7 + dayIndex - firstDay + 1;
 
-                    return (
-                      <td key={dayIndex}>
-                        {dayNumber > 0 && dayNumber <= daysInMonth
-                          ? dayNumber
-                          : ""}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            }
+                  return (
+                    <td key={dayIndex}>
+                      {dayNumber > 0 && dayNumber <= daysInMonth
+                        ? dayNumber
+                        : ""}
+                    </td>
+                  );
+                })}
+              </tr>
+            ),
           )}
         </tbody>
       </table>
-
-      <button onClick={() => setYear(String(Number(year) - 1))}>
-        ⏪
-      </button>
-      
-      <button onClick={() => {
-        if (Number(month) === 0) {
-          setMonth("11");
-          setYear(String(Number(year) - 1));
-        } else {
-          setMonth(String(Number(month) - 1));
-        }
-      }}>
-        🡸
-      </button>
-
-      <button onClick={() => {
-        if (Number(month) === 11) {
-          setMonth("0");
-          setYear(String(Number(year) + 1));
-        } else {
-          setMonth(String(Number(month) + 1));
-        }
-      }}>
-        🡺
-      </button>
-
-      
-
-      <button onClick={() => setYear(String(Number(year) + 1))}>
-        ⏩
-      </button>
     </div>
   );
 };
